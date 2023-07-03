@@ -199,9 +199,6 @@ export default function MemeGenerator() {
                                 <p className='draggable' contentEditable='true' style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }} >EDIT & DRAG ME</p>
                             </Draggable>
 
-                            <Draggable>
-                                <p className='draggable' contentEditable='true' style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }} >EDIT & DRAG ME</p>
-                            </Draggable>
                         </Box>
                     </Box>
                 )}
