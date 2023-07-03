@@ -1,0 +1,22 @@
+@import url('https://fonts.cdnfonts.com/css/impact');
+
+html, body {
+    margin: 0;
+    padding: 0;  
+}
+
+.background {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    z-index: -2;
+}
+
+.draggable {
+    font-family: 'Impact', sans-serif;
+    font-weight: 500;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: 70px;
+    margin: 0;
+}

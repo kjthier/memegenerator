@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <title>Meme Generator 💬</title>
+    <link rel="stylesheet" href="index.css" />
+
+  </head>
+  <body>
+    <canvas class="background"></canvas>
+    <div id="root"></div>
+
+    <!-- background animation: https://marcbruederlin.github.io/particles.js/ -->
+    <script src="node_modules/particlesjs/dist/particles.js"></script>
+    <script>
+      window.onload= function() {
+        Particles.init({
+          selector: '.background',
+          connectParticles: true,
+          maxParticles: 55,
+          color: '#48F2E3',
+        });
+      };
+    </script>
+
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
