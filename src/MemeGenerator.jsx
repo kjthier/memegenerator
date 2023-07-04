@@ -14,6 +14,7 @@ export default function MemeGenerator() {
     const [uploadedImage, setUploadedImage] = useState(null)
     const [isCustomImageSelected, setIsCustomImageSelected] = useState(false);
     const [draggableComponents, setDraggableComponents] = useState([])
+    const [contentEditable, setContentEditable] = useState(false)
     const [selectedColor, setSelectedColor] = useState('white')
     const [selectedSize, setSelectedSize] = useState('70px')
     const [selectedFont, setSelectedFont] = useState('Impact')
@@ -238,11 +239,14 @@ export default function MemeGenerator() {
                         <Box position='absolute' top='30%' left='4%' transform='translate(-50%, -50%)'>
                         {draggableComponents.map(component => component)}
                             <Draggable>
-                                <p className='draggable' contentEditable='true' style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }} >EDIT & DRAG ME</p>
-                            </Draggable>
-
-                            <Draggable>
-                                <p className='draggable' contentEditable='true' style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }} >EDIT & DRAG ME</p>
+                                <p 
+                                    className='draggable' 
+                                    contentEditable='true'
+                                    onClick={() => setContentEditable(!contentEditable)}
+                                    style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }} 
+                                >
+                                    EDIT & DRAG ME
+                                </p>
                             </Draggable>
                         </Box>
                     </Box>
