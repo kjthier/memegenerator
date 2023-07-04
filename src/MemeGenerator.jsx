@@ -14,7 +14,7 @@ export default function MemeGenerator() {
     const [uploadedImage, setUploadedImage] = useState(null)
     const [isCustomImageSelected, setIsCustomImageSelected] = useState(false);
     const [draggableComponents, setDraggableComponents] = useState([])
-    const [contentEditable, setContentEditable] = useState(false)
+    const [isEditing, setIsEditing] = useState(false); // Track edit mode
     const [selectedColor, setSelectedColor] = useState('white')
     const [selectedSize, setSelectedSize] = useState('70px')
     const [selectedFont, setSelectedFont] = useState('Impact')
@@ -109,7 +109,10 @@ export default function MemeGenerator() {
         const newComponent = (
             <Draggable key={draggableComponents.length}>
                 <p 
-                    className='draggable' contentEditable='true' 
+                    className={`draggable ${isEditing ? 'editing' : ''}`}
+                    contentEditable={isEditing}
+                    onClick={() => setIsEditing(true)}
+                    onBlur={() => setIsEditing(false)}
                     style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }}
                 >
                     EDIT & DRAG ME
@@ -242,7 +245,6 @@ export default function MemeGenerator() {
                                 <p 
                                     className='draggable' 
                                     contentEditable='true'
-                                    onClick={() => setContentEditable(!contentEditable)}
                                     style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }} 
                                 >
                                     EDIT & DRAG ME
