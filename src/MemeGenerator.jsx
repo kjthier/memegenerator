@@ -96,6 +96,28 @@ export default function MemeGenerator() {
         setSelectedFont(font)
     }
 
+    // upload image button
+    const handleUploadImage = (e) => {
+        const file = e.target.files[0]
+        setUploadedImage(file)
+        setIsCustomImageSelected(true);
+    }
+
+    // add text button
+    const createDraggableComponent = () => {
+        const newComponent = (
+            <Draggable key={draggableComponents.length}>
+                <p 
+                    className='draggable' contentEditable='true' 
+                    style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }}
+                >
+                    EDIT & DRAG ME
+                </p>
+            </Draggable>
+        );
+        setDraggableComponents(prevComponents => [...prevComponents, newComponent]);
+    };
+
     // download button
     const handleSaveMeme = () => {
         if (memeContainerRef.current) {
@@ -109,23 +131,27 @@ export default function MemeGenerator() {
         }
     }
 
-    // upload image
-    const handleUploadImage = (e) => {
-        const file = e.target.files[0]
-        setUploadedImage(file)
-        setIsCustomImageSelected(true);
-    }
+    // share button
+    const handleShareMeme = () => {
+        if (navigator.share && memeContainerRef.current) {
+            domtoimage.toBlob(memeContainerRef.current)
+            .then((blob) => {
+                const filesArray = [new File([blob], 'meme.png', { type: 'image/png' })];
 
-    // button to add more text
-    const createDraggableComponent = () => {
-        const newComponent = (
-            <Draggable key={draggableComponents.length}>
-                <p className='draggable' contentEditable='true' style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }}>
-                    EDIT & DRAG ME
-                </p>
-            </Draggable>
-        );
-        setDraggableComponents(prevComponents => [...prevComponents, newComponent]);
+                // Use the Web Share API to share the image
+                navigator.share({
+                    files: filesArray,
+                })
+                .then(() => {
+                // Sharing succeeded
+                console.log('Meme shared successfully');
+                })
+                .catch((error) => {
+                // Sharing failed
+                console.error('Error sharing meme:', error);
+                });
+            });
+        }
     };
     
     return (
@@ -134,51 +160,71 @@ export default function MemeGenerator() {
             <Typography variant='h3' mt={4} mb={4}>MEME GENERATOR 💬</Typography>
 
             <Stack direction='row' spacing={2} mb={2}>
-
                 <FormControl>
                     <InputLabel>Template</InputLabel>
-                    <Select label='template' size='small' value={selectedMeme} onChange={handleMemeChange}>
+                    <Select 
+                        label='template' 
+                        size='small' 
+                        value={selectedMeme} 
+                        onChange={handleMemeChange}>
                         {memes && memes.map((meme) => (
-                            <MenuItem key={meme.id} value={meme.id}>{meme.name}</MenuItem>
+                            <MenuItem key={meme.id} value={meme.id}>
+                                {meme.name}
+                            </MenuItem>
                         ))}
                     </Select>
                 </FormControl>
 
                 <Typography variant='h6' mb={2}>or</Typography>
 
-                <Button variant='contained' component='label' >Choose file...
-                    <input type='file' accept='image/*' onChange={handleUploadImage} style={{ display: 'none'}} />
+                <Button variant='contained' component='label'>File
+                    <input 
+                        type='file' 
+                        accept='image/*' 
+                        onChange={handleUploadImage} 
+                        style={{ display: 'none'}} 
+                    />
                 </Button>
-
             </Stack>
             
             <Stack direction='row' spacing={2} mb={2}>
-                
                 <FormControl>
                     <InputLabel>Font</InputLabel>
-                    <Select size='small' label='font' value={selectedFont} onChange={(e) => handleFontChange(e.target.value)}>
+                    <Select 
+                        size='small' 
+                        label='font' 
+                        value={selectedFont} 
+                        onChange={(e) => handleFontChange(e.target.value)}
+                    >
                         {renderFontOptions}
                     </Select>
                 </FormControl>
 
                 <FormControl>
                     <InputLabel>Color</InputLabel>
-                    <Select size='small' label='color' value={selectedColor} onChange={(e) => handleColorChange(e.target.value)}>
+                    <Select 
+                        size='small' 
+                        label='color' 
+                        value={selectedColor} 
+                        onChange={(e) => handleColorChange(e.target.value)}
+                    >
                         {renderColorOptions}
                     </Select>
                 </FormControl>
 
                 <FormControl>
                     <InputLabel>Size</InputLabel>
-                    <Select size='small' label='size' value={selectedSize} onChange={(e) => handleSizeChange(e.target.value)}>
+                    <Select 
+                        size='small' 
+                        label='size' 
+                        value={selectedSize} 
+                        onChange={(e) => handleSizeChange(e.target.value)}
+                    >
                         {renderSizeOptions}
                     </Select>
                 </FormControl>
-                <Button variant='contained' onClick={createDraggableComponent}>add more text</Button>
-
-                
+                <Button variant='contained' onClick={createDraggableComponent}>add text</Button>
             </Stack>
-            
                        
             <Box ref={memeContainerRef} mb={2}>
                 {selectedMeme && (
@@ -198,21 +244,32 @@ export default function MemeGenerator() {
                             <Draggable>
                                 <p className='draggable' contentEditable='true' style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }} >EDIT & DRAG ME</p>
                             </Draggable>
-
                         </Box>
                     </Box>
                 )}
             </Box>
 
             <Stack direction='row' spacing={2} mb={6}>
-                <DownloadIcon fontSize='large' onClick={handleSaveMeme} style={{ cursor: 'pointer' }} />
-                <ShareIcon fontSize='large' style={{ cursor: 'pointer' }} />
+                <DownloadIcon 
+                    fontSize='large' 
+                    onClick={handleSaveMeme} 
+                    style={{ cursor: 'pointer' }} 
+                />
+                <ShareIcon 
+                    fontSize='large' 
+                    onClick={handleShareMeme} 
+                    style={{ cursor: 'pointer' }} 
+                />
             </Stack>
 
         </Container>
     )
 }
 
+
+// draggable text not working on mobile
+// share button
+// refactor into components?
 
 // https://learn.wbscodingschool.com/lessons/%f0%9f%9b%a0%ef%b8%8f-react-meme-generator/
 
