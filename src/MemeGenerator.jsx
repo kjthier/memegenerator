@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { Stack, FormControl, InputLabel, Select, MenuItem, Container, Box, Typography, Button } from '@mui/material'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import DownloadIcon from '@mui/icons-material/Download'
 import ShareIcon from '@mui/icons-material/Share';
 import axios from 'axios'
@@ -143,22 +145,28 @@ export default function MemeGenerator() {
 
     // share button
     const handleShareMeme = () => {
-        if (navigator.share && memeContainerRef.current) {
-            domtoimage.toBlob(memeContainerRef.current)
-            .then((blob) => {
-                const filesArray = [new File([blob], 'meme.png', { type: 'image/png' })]
+        if (navigator.share && typeof navigator.share === 'function' && memeContainerRef.current) {
+            domtoimage
+                .toBlob(memeContainerRef.current)
+                .then((blob) => {
+                    const filesArray = [new File([blob], 'meme.png', { type: 'image/png' })]
 
-                // Web Share API to share the image
-                navigator.share({
-                    files: filesArray,
-                })
-                .then(() => {
-                    console.log('Meme shared successfully')
+                    // Web Share API to share the image
+                    navigator.share({
+                        files: filesArray,
+                    })
+                    .then(() => {
+                        console.log('Meme shared successfully')
+                    })
+                    .catch((error) => {
+                        console.error('Error sharing meme:', error)
+                    })
                 })
                 .catch((error) => {
-                    console.error('Error sharing meme:', error)
-                })
-            })
+                    console.error('Error creating meme image:', error)
+                  })
+              } else {
+                toast.error('Web Share API is not supported')
         }
     }
     
@@ -277,7 +285,6 @@ export default function MemeGenerator() {
 // draggable elements reposition when text is added
 // draggable text not working on mobile
 // double click to highlight editable text
-// fix share button
 // refactor into components?
 
 // https://learn.wbscodingschool.com/lessons/%f0%9f%9b%a0%ef%b8%8f-react-meme-generator/
