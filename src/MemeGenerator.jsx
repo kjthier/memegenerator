@@ -231,7 +231,7 @@ export default function MemeGenerator() {
                         {renderSizeOptions}
                     </Select>
                 </FormControl>
-                <Button variant='contained' onClick={createDraggableComponent}>add text</Button>
+                <Button variant='contained' onClick={createDraggableComponent}>text</Button>
             </Stack>
                        
             <Box ref={memeContainerRef} mb={2}>
