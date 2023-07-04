@@ -14,7 +14,6 @@ export default function MemeGenerator() {
     const [uploadedImage, setUploadedImage] = useState(null)
     const [isCustomImageSelected, setIsCustomImageSelected] = useState(false);
     const [draggableComponents, setDraggableComponents] = useState([])
-    const [isEditing, setIsEditing] = useState(false); // Track edit mode
     const [selectedColor, setSelectedColor] = useState('white')
     const [selectedSize, setSelectedSize] = useState('70px')
     const [selectedFont, setSelectedFont] = useState('Impact')
@@ -109,10 +108,8 @@ export default function MemeGenerator() {
         const newComponent = (
             <Draggable key={draggableComponents.length}>
                 <p 
-                    className={`draggable ${isEditing ? 'editing' : ''}`}
-                    contentEditable={isEditing}
-                    onClick={() => setIsEditing(true)}
-                    onBlur={() => setIsEditing(false)}
+                    className='draggable' 
+                    contentEditable='true' 
                     style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }}
                 >
                     EDIT & DRAG ME
@@ -140,23 +137,21 @@ export default function MemeGenerator() {
         if (navigator.share && memeContainerRef.current) {
             domtoimage.toBlob(memeContainerRef.current)
             .then((blob) => {
-                const filesArray = [new File([blob], 'meme.png', { type: 'image/png' })];
+                const filesArray = [new File([blob], 'meme.png', { type: 'image/png' })]
 
-                // Use the Web Share API to share the image
+                // Web Share API to share the image
                 navigator.share({
                     files: filesArray,
                 })
                 .then(() => {
-                // Sharing succeeded
-                console.log('Meme shared successfully');
+                    console.log('Meme shared successfully')
                 })
                 .catch((error) => {
-                // Sharing failed
-                console.error('Error sharing meme:', error);
-                });
-            });
+                    console.error('Error sharing meme:', error)
+                })
+            })
         }
-    };
+    }
     
     return (
         <Container maxWidth='md'>
@@ -242,15 +237,13 @@ export default function MemeGenerator() {
                         <Box position='absolute' top='30%' left='4%' transform='translate(-50%, -50%)'>
                         {draggableComponents.map(component => component)}
                             <Draggable>
-                            <p 
-                                className={`draggable ${isEditing ? 'editing' : ''}`}
-                                contentEditable={isEditing}
-                                onClick={() => setIsEditing(true)}
-                                onBlur={() => setIsEditing(false)}
-                                style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }}
-                            >
-                                EDIT & DRAG ME
-                            </p>
+                                <p 
+                                    className='draggable' 
+                                    contentEditable='true'
+                                    style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }} 
+                                >
+                                    EDIT & DRAG ME
+                                </p>
                             </Draggable>
                         </Box>
                     </Box>
@@ -276,12 +269,9 @@ export default function MemeGenerator() {
 
 
 // draggable text not working on mobile
-// share button
+// double click to highlight editable text
+// fix share button
 // refactor into components?
 
 // https://learn.wbscodingschool.com/lessons/%f0%9f%9b%a0%ef%b8%8f-react-meme-generator/
-
-// css image?? https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_image_text, https://www.w3schools.com/css/css_positioning.asp
-
-
-// responsiveness & style, https://mui-treasury.com/styles/button/
+// https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_image_text, https://www.w3schools.com/css/css_positioning.asp
