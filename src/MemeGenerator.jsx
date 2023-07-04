@@ -103,21 +103,30 @@ export default function MemeGenerator() {
         setIsCustomImageSelected(true);
     }
 
+    const DraggableText = ({ color, size, font }) => {
+        return (
+          <Draggable>
+            <p
+              className='draggable'
+              contentEditable='true'
+              style={{ color: color, fontSize: size, fontFamily: font }}
+            >
+              EDIT & DRAG ME
+            </p>
+          </Draggable>
+        );
+    };
+      
     // add text button
     const createDraggableComponent = () => {
-        const newComponent = (
-            <Draggable key={draggableComponents.length}>
-                <p 
-                    className='draggable' 
-                    contentEditable='true' 
-                    style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }}
-                >
-                    EDIT & DRAG ME
-                </p>
-            </Draggable>
-        );
-        setDraggableComponents(prevComponents => [...prevComponents, newComponent]);
-    };
+        const newComponent = {
+            id: draggableComponents.length,
+            color: selectedColor,
+            size: selectedSize,
+            font: selectedFont
+        }
+        setDraggableComponents(prevComponents => [...prevComponents, newComponent])
+    }
 
     // download button
     const handleSaveMeme = () => {
@@ -234,17 +243,15 @@ export default function MemeGenerator() {
                             <img src={`https://api.memegen.link/images/${selectedMeme}.png`} alt="Meme" style={{ maxWidth: '100%', display: 'block' }} />
                         )}
 
-                        <Box position='absolute' top='30%' left='4%' transform='translate(-50%, -50%)'>
-                        {draggableComponents.map(component => component)}
-                            <Draggable>
-                                <p 
-                                    className='draggable' 
-                                    contentEditable='true'
-                                    style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }} 
-                                >
-                                    EDIT & DRAG ME
-                                </p>
-                            </Draggable>
+                    <Box position='absolute' top='30%' left='4%' transform='translate(-50%, -50%)'>
+                        {draggableComponents.map((component, index) => (
+                            <DraggableText
+                                key={index}
+                                color={selectedColor}
+                                size={selectedSize}
+                                font={selectedFont}
+                            />
+                        ))}
                         </Box>
                     </Box>
                 )}
@@ -267,7 +274,7 @@ export default function MemeGenerator() {
     )
 }
 
-
+// draggable elements reposition when text is added
 // draggable text not working on mobile
 // double click to highlight editable text
 // fix share button
