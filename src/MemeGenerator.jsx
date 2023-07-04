@@ -242,13 +242,15 @@ export default function MemeGenerator() {
                         <Box position='absolute' top='30%' left='4%' transform='translate(-50%, -50%)'>
                         {draggableComponents.map(component => component)}
                             <Draggable>
-                                <p 
-                                    className='draggable' 
-                                    contentEditable='true'
-                                    style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }} 
-                                >
-                                    EDIT & DRAG ME
-                                </p>
+                            <p 
+                                className={`draggable ${isEditing ? 'editing' : ''}`}
+                                contentEditable={isEditing}
+                                onClick={() => setIsEditing(true)}
+                                onBlur={() => setIsEditing(false)}
+                                style={{ color: selectedColor, fontSize: selectedSize, fontFamily: selectedFont }}
+                            >
+                                EDIT & DRAG ME
+                            </p>
                             </Draggable>
                         </Box>
                     </Box>
